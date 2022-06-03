@@ -38,6 +38,7 @@ passport.deserializeUser((id, done) => {
   // User.findById(id).then(user => {
   //   done(null, user);
   // });
+  console.log('deserializeUser');
   done(null, id);
 });
 const app = express();
@@ -76,7 +77,10 @@ app.get("/auth/google/callback", passport.authenticate("google", {
 app.get("/failure", (req, res) => {
   return res.send("Failed to log in!");
 });
-app.get("/auth/logout", (req, res) => {});
+app.get("/auth/logout", (req, res) => {
+    req.logout(); //remove req.user and clear any logged in session
+    return res.redirect("/");
+});
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
